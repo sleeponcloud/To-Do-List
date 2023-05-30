@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     TextField,
     Grid,
@@ -11,9 +11,9 @@ import {
 import { styled } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GrFormAdd } from "react-icons/gr";
-import { AiFillDelete, AiOutlineCheck } from "react-icons/ai";
 import { BiSortUp, BiSortDown } from "react-icons/bi";
 import moment from 'moment';
+import List from './List.jsx';
 
 const mainTheme = createTheme({
     breakpoints: {
@@ -40,22 +40,7 @@ const StyledCard = styled(Card)(() => ({
     'backgroundColor': '#fff289',
 }));
 
-const StyledTextField = styled(TextField)(() => ({
-    'width': '65%',
-    'outline': 'none',
-    'color': '#000',
-    '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-            border: 'none',
-        },
-        '&:hover fieldset': {
-            'border': 'none',
-        },
-    },
-}));
 const sortColor = '#8a8a8a';
-const deleteColor = '#e55454';
-const checkColor = '#54e554';
 
 function App () {
     const [newThing, setNewThing] = useState('');
@@ -166,7 +151,6 @@ function App () {
                         </InputAdornment>,
                     }}
                 />
-                
             </StyledGrid>
             <Grid container item justifyContent={'space-between'}>
                 <Grid item xs={12} sm={6} sx={{padding: '8px'}}>
@@ -175,36 +159,13 @@ function App () {
                             To Do
                         </Typography>
                         <Grid container>
-                            {
-                                todoList.map((item, index) => {
-                                    if (item.done) {
-                                        return null;
-                                    };
-                                    return (
-                                        <Grid container item key={item.id} sx={{padding: '8px'}}>
-                                            <StyledTextField
-                                                label={convertTimeFormat(item.updateTime)}
-                                                defaultValue={item.text}
-                                                size="small"
-                                                onBlur={(event) => {
-                                                    editText(event, item)
-                                                }}
-                                                InputProps={{
-                                                    style: {
-                                                        outline: 'none',
-                                                    },
-                                                }}
-                                            />
-                                            <IconButton onClick={() => {clickDelete(item)}}>
-                                                <AiFillDelete style={{color: deleteColor}}/>
-                                            </IconButton>
-                                            <IconButton onClick={()=> {clickCheck(item)}}>
-                                                <AiOutlineCheck style={{color: checkColor}}/>
-                                            </IconButton>
-                                        </Grid>
-                                    )
-                                })
-                            }
+                            <List
+                                todoList={todoList}
+                                done={false}
+                                editText={editText}
+                                clickDelete={clickDelete}
+                                clickCheck={clickCheck}
+                            />
                         </Grid>
                     </StyledCard>
                 </Grid>
@@ -214,39 +175,13 @@ function App () {
                             Done
                         </Typography>
                         <Grid container>
-                            {
-                                todoList.map((item, index) => {
-                                    if (!item.done) {
-                                        return null;
-                                    };
-                                    return (
-                                        <Grid container item
-                                            key={item.id}
-                                            sx={{padding: '8px', textDecoration: 'line-through'}}
-                                        >
-                                            <StyledTextField
-                                                label={convertTimeFormat(item.updateTime)}
-                                                defaultValue={item.text}
-                                                size="small"
-                                                onBlur={(event) => {
-                                                    editText(event, item)
-                                                }}
-                                                InputProps={{
-                                                    style: {
-                                                        outline: 'none',
-                                                    },
-                                                }}
-                                            />
-                                            <IconButton onClick={() => {clickDelete(item)}}>
-                                                <AiFillDelete style={{color: deleteColor}}/>
-                                            </IconButton>
-                                            <IconButton onClick={()=> {clickCheck(item)}}>
-                                                <AiOutlineCheck style={{color: checkColor}}/>
-                                            </IconButton>
-                                        </Grid>
-                                    )
-                                })
-                            }
+                            <List
+                                todoList={todoList}
+                                done={true}
+                                editText={editText}
+                                clickDelete={clickDelete}
+                                clickCheck={clickCheck}
+                            />
                         </Grid>
                     </StyledCard>
                 </Grid>
